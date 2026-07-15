@@ -2,6 +2,8 @@ package resources
 
 import (
 	"context"
+	"embed"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -9,6 +11,9 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
+
+//go:embed skills/SKILL.md
+var skillFile embed.FS
 
 var AllResources []RegisteredResource
 
@@ -28,7 +33,7 @@ func Register(uri, name, desc string, handler server.ResourceHandlerFunc) {
 
 func RegisterFile(uri, name, desc, filePath string) {
 	Register(uri, name, desc, func(ctx context.Context, req mcp.ReadResourceRequest) ([]mcp.ResourceContents, error) {
-		data, err := os.ReadFile(filePath)
+		data, err := fs.ReadFile(skillFile, filePath)
 		if err != nil {
 			return nil, err
 		}
