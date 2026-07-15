@@ -40,5 +40,3 @@ func RegisterFile(uri, name, desc, filePath string) {
 		}, nil
 	})
 }
-
-
