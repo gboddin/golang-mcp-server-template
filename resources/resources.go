@@ -3,7 +3,6 @@ package resources
 import (
 	"context"
 	"os"
-	"path/filepath"
 
 	"github.com/charmbracelet/log"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -42,20 +41,4 @@ func RegisterFile(uri, name, desc, filePath string) {
 	})
 }
 
-func FindProjectRoot() string {
-	dir, err := os.Getwd()
-	if err != nil {
-		return "."
-	}
-	for {
-		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
-			return dir
-		}
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			break
-		}
-		dir = parent
-	}
-	return "."
-}
+
