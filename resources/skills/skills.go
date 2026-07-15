@@ -4,15 +4,18 @@ import (
 	"context"
 	"embed"
 
-	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/gbored/golang-mcp-server-template/resources"
+	"github.com/mark3labs/mcp-go/mcp"
 )
 
 //go:embed SKILL.md
 var SkillFile embed.FS
 
 func init() {
-	data, _ := SkillFile.ReadFile("SKILL.md")
+	data, err := SkillFile.ReadFile("SKILL.md")
+	if err != nil {
+		panic(err)
+	}
 	resources.Register("calculator://skills", "Calculator Skill", "Calculator tool usage guidelines",
 		func(ctx context.Context, req mcp.ReadResourceRequest) ([]mcp.ResourceContents, error) {
 			return []mcp.ResourceContents{
