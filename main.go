@@ -12,6 +12,7 @@ import (
 	"github.com/gbored/golang-mcp-server-template/config"
 	
 	"github.com/gbored/golang-mcp-server-template/resources"
+	"github.com/gbored/golang-mcp-server-template/resources/skills"
 	"github.com/gbored/golang-mcp-server-template/tools"
 	_ "github.com/gbored/golang-mcp-server-template/tools/calculator"
 )
@@ -35,6 +36,19 @@ func main() {
 	for _, r := range resources.AllResources {
 		srv.AddResource(r.Resource, r.Handler)
 	}
+
+	data, _ := skills.SkillFile.ReadFile("SKILL.md")
+	srv.AddResource(mcp.NewResource("calculator://skills", "Calculator Skill", mcp.WithResourceDescription("Calculator tool usage guidelines")),
+		func(ctx context.Context, req mcp.ReadResourceRequest) ([]mcp.ResourceContents, error) {
+			return []mcp.ResourceContents{
+				mcp.TextResourceContents{
+					URI:      req.Params.URI,
+					MIMEType: "text/markdown",
+					Text:     string(data),
+				},
+			}, nil
+		},
+	)
 
 	port := config.Port()
 	apiKey := config.APIKey()
